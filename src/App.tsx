@@ -39,17 +39,62 @@ const nodeClassName = (node: Node) => node.type || 'default';
 const theme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      main: '#8f3fff', // vivid purple
+    },
+    secondary: {
+      main: '#6366f1', // blue accent
+    },
     background: {
-      default: '#1e1e2e',
+      default: '#181a20',
       paper: '#23293a',
     },
     text: {
       primary: '#e2e8f0',
       secondary: '#94a3b8',
     },
+    info: {
+      main: '#4f46e5',
+    },
   },
   typography: {
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
+    fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif",
+    fontWeightBold: 700,
+    fontWeightMedium: 500,
+    fontWeightRegular: 400,
+    h6: {
+      fontWeight: 700,
+      letterSpacing: 0.5,
+    },
+  },
+  shape: {
+    borderRadius: 14,
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
+          borderRadius: 14,
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          textTransform: 'none',
+          fontWeight: 600,
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+        },
+      },
+    },
   },
 });
 
@@ -272,14 +317,16 @@ function TopologyBuilder() {
       display: 'flex', 
       height: 'calc(100vh - 120px)', 
       gap: 2,
-      p: 2
+      p: 2,
+      background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
     }}>
       {/* Left Panel: YAML Configuration */}
       <Box sx={{ 
         flex: 1,
-        backgroundColor: '#1a1a1a',
-        border: '1px solid #333',
-        borderRadius: '12px',
+        background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
+        border: '1.5px solid #4f46e5',
+        boxShadow: '0 2px 16px 0 #4f46e533',
+        borderRadius: '18px',
         overflow: 'hidden',
       }}>
         <YAMLEditor
@@ -299,9 +346,10 @@ function TopologyBuilder() {
       {/* Right Panel: Network Topology */}
       <Box sx={{ 
         flex: 2,
-        backgroundColor: '#1a1a1a',
-        border: '1px solid #333',
-        borderRadius: '12px',
+        background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
+        border: '1.5px solid #8f3fff',
+        boxShadow: '0 2px 24px 0 #8f3fff33',
+        borderRadius: '18px',
         overflow: 'hidden',
         position: 'relative',
       }}>
@@ -329,29 +377,37 @@ function TopologyBuilder() {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           defaultEdgeOptions={{
-            style: { stroke: '#666', strokeWidth: 2 },
+            style: { stroke: 'url(#edge-gradient)', strokeWidth: 2 },
           }}
         >
+          <defs>
+            <linearGradient id="edge-gradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#6366f1" />
+              <stop offset="100%" stopColor="#8f3fff" />
+            </linearGradient>
+          </defs>
           <MiniMap 
             zoomable 
             pannable 
             nodeClassName={nodeClassName}
             style={{
-              backgroundColor: '#1a1a1a',
-              border: '1px solid #333',
+              background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
+              border: '1.5px solid #6366f1',
+              borderRadius: 12,
             }}
           />
           <Controls 
             style={{
-              backgroundColor: '#1a1a1a',
-              border: '1px solid #333',
-              borderRadius: '8px',
+              background: 'rgba(79,70,229,0.85)',
+              border: '1.5px solid #8f3fff',
+              borderRadius: 12,
+              color: '#e2e8f0',
             }}
           />
           <Background 
-            color="#2a2a2a" 
-            gap={20}
-            size={1}
+            color="#23293a" 
+            gap={22}
+            size={1.5}
           />
         </ReactFlow>
       </Box>
