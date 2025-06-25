@@ -22,7 +22,6 @@ import YAMLEditor from './components/YAMLEditor';
 import CustomNode from './components/CustomNode';
 import { CssBaseline, ThemeProvider, createTheme, Box, Alert } from '@mui/material';
 import { parseYamlToFabric, fabricToTopology, validateYaml } from './utils/yamlParser';
-import LegendPanel from './components/LegendPanel';
 
 const nodeTypes = {
   annotation: AnnotationNode,
@@ -180,18 +179,20 @@ function TopologyBuilder() {
     <Box sx={{ 
       display: 'flex', 
       height: 'calc(100vh - 120px)', 
-      gap: 2,
-      p: 2,
-      background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
+      gap: 3,
+      p: 3,
+      background: 'linear-gradient(135deg, #20223a 0%, #181a20 100%)',
     }}>
       {/* Left Panel: YAML Configuration */}
       <Box sx={{ 
         flex: 1,
-        background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
-        border: '1.5px solid #4f46e5',
-        boxShadow: '0 2px 16px 0 #4f46e533',
+        background: '#23293a',
+        border: '1.5px solid #333',
+        boxShadow: '0 2px 16px 0 #23293a44',
         borderRadius: '18px',
         overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
       }}>
         <YAMLEditor
           value={yamlConfig}
@@ -210,12 +211,14 @@ function TopologyBuilder() {
       {/* Right Panel: Network Topology */}
       <Box sx={{ 
         flex: 2,
-        background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
-        border: '1.5px solid #8f3fff',
-        boxShadow: '0 2px 24px 0 #8f3fff33',
+        background: '#23293a',
+        border: '1.5px solid #333',
+        boxShadow: '0 2px 24px 0 #23293a44',
         borderRadius: '18px',
         overflow: 'hidden',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
       }}>
         {/* Topology Title */}
         <Box sx={{
@@ -227,7 +230,7 @@ function TopologyBuilder() {
           <span style={{
             fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif",
             fontWeight: 700,
-            fontSize: 20,
+            fontSize: 18,
             color: '#e2e8f0',
             letterSpacing: 0.2,
             textShadow: '0 2px 8px #23293a',
@@ -235,8 +238,6 @@ function TopologyBuilder() {
             {fabricName ? `${fabricName} Network Topology` : 'Network Topology'}
           </span>
         </Box>
-        {/* Legend Panel */}
-        <LegendPanel />
         {!isYamlValid && (
           <Box sx={{ 
             position: 'absolute', 
@@ -293,6 +294,7 @@ function TopologyBuilder() {
             color="#23293a" 
             gap={22}
             size={1.5}
+            variant="dots"
           />
         </ReactFlow>
       </Box>
