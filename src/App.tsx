@@ -22,6 +22,7 @@ import YAMLEditor from './components/YAMLEditor';
 import CustomNode from './components/CustomNode';
 import { CssBaseline, ThemeProvider, createTheme, Box, Alert } from '@mui/material';
 import { parseYamlToFabric, fabricToTopology, validateYaml } from './utils/yamlParser';
+import LegendPanel from './components/LegendPanel';
 
 const nodeTypes = {
   annotation: AnnotationNode,
@@ -100,41 +101,39 @@ const theme = createTheme({
   },
 });
 
-// Sample EDA YAML configuration
-const sampleYamlConfig = `apiVersion: fabrics.eda.nokia.com/v1alpha1
-kind: Fabric
-metadata:
-  name: myfabric-1
-  namespace: eda
-spec:
-  leafs:
-    leafNodeSelector:
-      - eda.nokia.com/role=leaf
-  spines:
-    spineNodeSelector:
-      - eda.nokia.com/role=spine
-  interSwitchLinks:
-    linkSelector:
-      - eda.nokia.com/role=interSwitch
-    unnumbered: IPV6
-  systemPoolIPV4: systemipv4-pool
-  underlayProtocol:
-    protocol:
-      - EBGP
-    bgp:
-      asnPool: asn-pool
-  overlayProtocol:
-    protocol: EBGP`;
+const YAML_API_URL = 'http://localhost:5174/api/yaml';
 
 function TopologyBuilder() {
-  const [yamlConfig, setYamlConfig] = useState(sampleYamlConfig);
+  const [yamlConfig, setYamlConfig] = useState('');
   const [isYamlValid, setIsYamlValid] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
+  // Fetch YAML from backend on mount
+  useEffect(() => {
+    fetch(YAML_API_URL)
+      .then(res => res.json())
+      .then(data => {
+        setYamlConfig(data.yaml);
+      })
+      .catch(() => {
+        setError('Failed to load YAML from server');
+      });
+  }, []);
+
+  // Save YAML to backend on every change
+  const handleYamlChange = useCallback((newYaml: string) => {
+    setYamlConfig(newYaml);
+    fetch(YAML_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ yaml: newYaml })
+    }).catch(() => setError('Failed to save YAML to server'));
+  }, []);
+
   // Initialize topology from YAML
   const initialTopology = (() => {
     try {
-      const fabric = parseYamlToFabric(sampleYamlConfig);
+      const fabric = parseYamlToFabric(yamlConfig);
       return fabricToTopology(fabric);
     } catch {
       return { nodes: [], edges: [] };
@@ -167,10 +166,6 @@ function TopologyBuilder() {
       setError(err instanceof Error ? err.message : 'Invalid YAML format');
     }
   }, [yamlConfig, setNodes, setEdges]);
-
-  const handleYamlChange = useCallback((newYaml: string) => {
-    setYamlConfig(newYaml);
-  }, []);
 
   // Get the fabric name for the title
   let fabricName = '';
@@ -240,6 +235,8 @@ function TopologyBuilder() {
             {fabricName ? `${fabricName} Network Topology` : 'Network Topology'}
           </span>
         </Box>
+        {/* Legend Panel */}
+        <LegendPanel />
         {!isYamlValid && (
           <Box sx={{ 
             position: 'absolute', 

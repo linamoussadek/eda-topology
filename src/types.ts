@@ -1,6 +1,17 @@
 import { type Node, type Edge } from 'reactflow';
 
 // EDA Fabric Types
+export interface EDANodePort {
+  port: number;
+  type: 'inter-switch' | 'access' | 'lag' | 'multi-homed-lag';
+}
+
+export interface EDANode {
+  name: string;
+  model: string;
+  ports: EDANodePort[];
+}
+
 export interface EDAFabric {
   apiVersion: string;
   kind: string;
@@ -29,6 +40,7 @@ export interface EDAFabric {
     overlayProtocol: {
       protocol: string;
     };
+    nodes?: EDANode[];
   };
 }
 

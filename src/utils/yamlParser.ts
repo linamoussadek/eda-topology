@@ -37,6 +37,8 @@ export interface TopologyNode {
   data: {
     label: string;
     nodeType: string;
+    model: string;
+    ports: { port: number; type: string }[];
   };
   position: { x: number; y: number };
   style?: React.CSSProperties;
@@ -85,13 +87,21 @@ export function fabricToTopology(fabric: EDAFabric): {
     nodes.push({
       id: `spine-${i}`,
       type: 'custom',
-      data: { 
-        label: `Spine-${i}`, 
-        nodeType: 'spine' 
+      data: {
+        label: `Spine-${i}`,
+        nodeType: 'spine',
+        model: '7220 IXR-D5',
+        ports: [
+          { port: 1, type: 'inter-switch' },
+          { port: 2, type: 'inter-switch' },
+          { port: 3, type: 'access' },
+          { port: 10, type: 'lag' },
+          { port: 12, type: 'multi-homed-lag' }
+        ]
       },
-      position: { 
-        x: startX + (i - 1) * spineSpacing, 
-        y: spineY 
+      position: {
+        x: startX + (i - 1) * spineSpacing,
+        y: spineY
       },
     });
   }
@@ -101,13 +111,21 @@ export function fabricToTopology(fabric: EDAFabric): {
     nodes.push({
       id: `leaf-${i}`,
       type: 'custom',
-      data: { 
-        label: `Leaf-${i}`, 
-        nodeType: 'leaf' 
+      data: {
+        label: `Leaf-${i}`,
+        nodeType: 'leaf',
+        model: '7220 IXR-D3L',
+        ports: [
+          { port: 3, type: 'access' },
+          { port: 9, type: 'access' },
+          { port: 10, type: 'lag' },
+          { port: 11, type: 'lag' },
+          { port: 12, type: 'multi-homed-lag' }
+        ]
       },
-      position: { 
-        x: startX + (i - 1) * leafSpacing, 
-        y: leafY 
+      position: {
+        x: startX + (i - 1) * leafSpacing,
+        y: leafY
       },
     });
   }
