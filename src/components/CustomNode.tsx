@@ -1,108 +1,54 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
-import { Box, Typography } from '@mui/material';
-import RouterIcon from '@mui/icons-material/Router';
-import HubIcon from '@mui/icons-material/Hub';
+import { memo } from 'react';
+import { Handle, Position, type NodeProps } from 'reactflow';
 
-interface CustomNodeProps {
-  data: {
-    label: string;
-    nodeType: 'leaf' | 'spine';
-    role: string;
-  };
-}
+const CustomNode = ({ data }: NodeProps) => {
+  // Slightly different background for spines vs leaves
+  const isSpine = data.nodeType === 'spine';
+  const bgColor = isSpine ? '#20223a' : '#23293a';
 
-const CustomNode: React.FC<CustomNodeProps> = ({ data }) => {
-  const isLeaf = data.nodeType === 'leaf';
-  
   return (
-    <Box
-      sx={{
-        padding: '12px 16px',
-        borderRadius: '8px',
-        border: '1px solid',
-        borderColor: isLeaf ? '#90caf9' : '#f48fb1',
-        backgroundColor: '#1a1a1a',
+    <div
+      style={{
+        background: bgColor,
+        border: '1px solid #333',
+        borderRadius: 5,
+        color: '#e2e8f0',
+        fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif",
+        fontWeight: 400, // not bold
+        fontSize: 13, // smaller text
+        padding: '8px 28px',
         minWidth: 140,
-        textAlign: 'center',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-        transition: 'all 0.2s ease-in-out',
-        '&:hover': {
-          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
-          transform: 'translateY(-2px)',
-          borderColor: isLeaf ? '#64b5f6' : '#f06292',
-        },
+        minHeight: 28,
+        maxHeight: 48,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        letterSpacing: 0.1,
+        boxShadow: 'none',
       }}
+      className="rf-default-node"
     >
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        style={{ 
-          background: '#90caf9',
-          width: '6px',
-          height: '6px',
-          border: '1px solid #1a1a1a'
-        }} 
-      />
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: isLeaf ? 'rgba(144, 202, 249, 0.2)' : 'rgba(244, 143, 177, 0.2)',
-            color: isLeaf ? '#90caf9' : '#f48fb1',
-            marginBottom: 1,
-          }}
-        >
-          {isLeaf ? (
-            <RouterIcon sx={{ fontSize: 18 }} />
-          ) : (
-            <HubIcon sx={{ fontSize: 18 }} />
-          )}
-        </Box>
-        
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            fontWeight: 600,
-            color: '#ffffff',
-            fontSize: '14px'
-          }}
-        >
-          {data.label}
-        </Typography>
-        
-        <Typography 
-          variant="caption" 
-          sx={{ 
-            color: isLeaf ? '#90caf9' : '#f48fb1',
-            fontWeight: 500,
-            textTransform: 'uppercase',
-            fontSize: '11px',
-            letterSpacing: '0.5px'
-          }}
-        >
-          {data.nodeType}
-        </Typography>
-      </Box>
-      
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        style={{ 
-          background: '#90caf9',
-          width: '6px',
-          height: '6px',
-          border: '1px solid #1a1a1a'
-        }} 
-      />
-    </Box>
+      <Handle type="target" position={Position.Top} style={{ background: '#6366f1', border: 0 }} />
+      <span>{data.label}</span>
+      {data.protocol && (
+        <span style={{ color: '#94a3b8', fontSize: 11, marginTop: 2 }}>{data.protocol}</span>
+      )}
+      {data.asnPool && (
+        <span style={{ color: '#94a3b8', fontSize: 11 }}>ASN: {data.asnPool}</span>
+      )}
+      {data.unnumbered && (
+        <span style={{ color: '#94a3b8', fontSize: 11 }}>Unnumbered: {data.unnumbered}</span>
+      )}
+      {data.selectors && data.selectors.length > 0 && (
+        <span style={{ color: '#94a3b8', fontSize: 10, marginTop: 2 }}>
+          {data.selectors.join(', ')}
+        </span>
+      )}
+      <Handle type="source" position={Position.Bottom} style={{ background: '#6366f1', border: 0 }} />
+    </div>
   );
 };
 
-export default CustomNode; 
+export default memo(CustomNode); 

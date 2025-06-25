@@ -20,28 +20,28 @@ export const nodes = [
   },
   {
     id: '1-1',
-    type: 'input',
+    type: 'custom',
     data: {
-      level: 1,
-      label: 'Input Node',
+      label: 'Spine-1',
+      nodeType: 'spine',
     },
     position: { x: 150, y: 0 },
   },
   {
     id: '1-2',
-    type: 'default',
+    type: 'custom',
     data: {
-      level: 1,
-      label: 'Default Node',
+      label: 'Leaf-1',
+      nodeType: 'leaf',
     },
     position: { x: 0, y: 100 },
   },
   {
     id: '1-3',
-    type: 'output',
+    type: 'custom',
     data: {
-      level: 1,
-      label: 'Output Node',
+      label: 'Leaf-2',
+      nodeType: 'leaf',
     },
     position: { x: 300, y: 100 },
   },
@@ -150,6 +150,12 @@ export const edges = [
     target: '1-2',
     label: 'edge',
     type: 'smoothstep',
+    animated: true,
+    style: {
+      stroke: 'url(#edge-gradient)',
+      strokeWidth: 3,
+      filter: 'drop-shadow(0 0 8px #8f3fff88)',
+    },
   },
   {
     id: 'e1-3',
@@ -157,6 +163,11 @@ export const edges = [
     target: '1-3',
     animated: true,
     label: 'animated edge',
+    style: {
+      stroke: 'url(#edge-gradient)',
+      strokeWidth: 3,
+      filter: 'drop-shadow(0 0 8px #6366f188)',
+    },
   },
   {
     id: 'e2-2',

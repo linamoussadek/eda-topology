@@ -4,8 +4,8 @@ import { styled } from '@mui/material/styles';
 
 const Sidebar = styled(Box)(() => ({
   width: 240,
-  backgroundColor: '#1a1a2e',
-  borderRight: '1px solid #333',
+  backgroundColor: '#181a20',
+  borderRight: '1.5px solid #23293a',
   display: 'flex',
   flexDirection: 'column',
   position: 'fixed',
@@ -21,13 +21,16 @@ const Main = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'column',
   height: '100vh',
-  backgroundColor: '#0f0f23',
+  backgroundColor: '#181a20',
 }));
 
 const Header = styled(AppBar)(() => ({
-  backgroundColor: '#6b46c1',
+  backgroundColor: '#8f3fff',
   boxShadow: 'none',
-  borderBottom: '1px solid #333',
+  borderBottom: '1.5px solid #23293a',
+  minHeight: 64,
+  display: 'flex',
+  justifyContent: 'center',
 }));
 
 interface EDALayoutProps {
@@ -36,20 +39,19 @@ interface EDALayoutProps {
 
 export default function EDALayout({ children }: EDALayoutProps) {
   return (
-    <Box sx={{ display: 'flex', height: '100vh' }}>
+    <Box sx={{ display: 'flex', height: '100vh', fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif" }}>
       {/* Sidebar */}
       <Sidebar>
-        <Box sx={{ p: 2, borderBottom: '1px solid #333' }}>
-          <Typography variant="h6" sx={{ color: '#e2e8f0', fontWeight: 600 }}>
+        <Box sx={{ p: 2, borderBottom: '1.5px solid #23293a' }}>
+          <Typography variant="h6" sx={{ color: '#e2e8f0', fontWeight: 700, fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif" }}>
             Nokia EDA
           </Typography>
-          <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+          <Typography variant="body2" sx={{ color: '#94a3b8', fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif" }}>
             Event Driven Automation
           </Typography>
         </Box>
-        
         <Box sx={{ flex: 1, p: 2 }}>
-          <Typography variant="subtitle2" sx={{ color: '#94a3b8', mb: 1 }}>
+          <Typography variant="subtitle2" sx={{ color: '#94a3b8', mb: 1, fontWeight: 600, fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif" }}>
             Topology Builder
           </Typography>
         </Box>
@@ -58,13 +60,17 @@ export default function EDALayout({ children }: EDALayoutProps) {
       {/* Main Content */}
       <Main>
         <Header position="static">
-          <Toolbar>
-            <Typography variant="h6" sx={{ color: '#e2e8f0' }}>
-              Network Topology Builder
+          <Toolbar sx={{ minHeight: 64, display: 'flex', alignItems: 'center', gap: 2 }}>
+            {/* Echidna logo placeholder */}
+            <Box sx={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1 0%, #8f3fff 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 2 }}>
+              {/* Replace with actual SVG/PNG if available */}
+              <span style={{ color: '#fff', fontWeight: 900, fontSize: 22, fontFamily: 'monospace' }}>N</span>
+            </Box>
+            <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, letterSpacing: 0.5, fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif" }}>
+              Nokia Event Driven Automation
             </Typography>
           </Toolbar>
         </Header>
-        
         <Box sx={{ flex: 1, p: 2 }}>
           {children}
         </Box>

@@ -84,7 +84,7 @@ export function fabricToTopology(fabric: EDAFabric): {
   for (let i = 1; i <= spineCount; i++) {
     nodes.push({
       id: `spine-${i}`,
-      type: 'input',
+      type: 'custom',
       data: { 
         label: `Spine-${i}`, 
         nodeType: 'spine' 
@@ -93,15 +93,6 @@ export function fabricToTopology(fabric: EDAFabric): {
         x: startX + (i - 1) * spineSpacing, 
         y: spineY 
       },
-      style: { 
-        background: '#ff6b6b', 
-        border: '2px solid #ff5252',
-        borderRadius: '8px',
-        color: 'white',
-        fontWeight: 'bold',
-        minWidth: '80px',
-        textAlign: 'center'
-      }
     });
   }
   
@@ -109,7 +100,7 @@ export function fabricToTopology(fabric: EDAFabric): {
   for (let i = 1; i <= leafCount; i++) {
     nodes.push({
       id: `leaf-${i}`,
-      type: i === leafCount ? 'output' : 'default',
+      type: 'custom',
       data: { 
         label: `Leaf-${i}`, 
         nodeType: 'leaf' 
@@ -118,35 +109,8 @@ export function fabricToTopology(fabric: EDAFabric): {
         x: startX + (i - 1) * leafSpacing, 
         y: leafY 
       },
-      style: { 
-        background: '#4ecdc4', 
-        border: '2px solid #26a69a',
-        borderRadius: '8px',
-        color: 'white',
-        fontWeight: 'bold',
-        minWidth: '80px',
-        textAlign: 'center'
-      }
     });
   }
-  
-  // Add annotation node with dynamic positioning
-  nodes.push({
-    id: 'annotation-1',
-    type: 'annotation',
-    draggable: false,
-    selectable: false,
-    data: {
-      level: 1,
-      label: `${fabric.metadata.name} Network Topology (${spineCount} Spines, ${leafCount} Leaves)`,
-      arrowStyle: {
-        right: 0,
-        bottom: 0,
-        transform: 'translate(-30px,10px) rotate(-80deg)',
-      },
-    },
-    position: { x: 50, y: -50 },
-  });
   
   // Create edges between spines and leaves
   const protocol = fabric.spec.underlayProtocol.protocol.join(', ');

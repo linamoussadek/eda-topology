@@ -19,6 +19,7 @@ import TextInputNode from './components/TextInputNode';
 import ButtonEdge from './components/ButtonEdge';
 import EDALayout from './components/EDALayout';
 import YAMLEditor from './components/YAMLEditor';
+import CustomNode from './components/CustomNode';
 import { CssBaseline, ThemeProvider, createTheme, Box, Alert } from '@mui/material';
 import { parseYamlToFabric, fabricToTopology, validateYaml } from './utils/yamlParser';
 
@@ -28,6 +29,7 @@ const nodeTypes = {
   resizer: ResizerNode,
   circle: CircleNode,
   textinput: TextInputNode,
+  custom: CustomNode,
 };
 
 const edgeTypes = {
@@ -124,148 +126,6 @@ spec:
   overlayProtocol:
     protocol: EBGP`;
 
-// Network topology nodes and edges
-const networkNodes = [
-  {
-    id: 'spine-1',
-    type: 'input',
-    data: { label: 'Spine-1', nodeType: 'spine' },
-    position: { x: 250, y: 50 },
-    style: { 
-      background: '#ff6b6b', 
-      border: '2px solid #ff5252',
-      borderRadius: '8px',
-      color: 'white',
-      fontWeight: 'bold'
-    }
-  },
-  {
-    id: 'spine-2',
-    type: 'input',
-    data: { label: 'Spine-2', nodeType: 'spine' },
-    position: { x: 450, y: 50 },
-    style: { 
-      background: '#ff6b6b', 
-      border: '2px solid #ff5252',
-      borderRadius: '8px',
-      color: 'white',
-      fontWeight: 'bold'
-    }
-  },
-  {
-    id: 'leaf-1',
-    type: 'default',
-    data: { label: 'Leaf-1', nodeType: 'leaf' },
-    position: { x: 100, y: 200 },
-    style: { 
-      background: '#4ecdc4', 
-      border: '2px solid #26a69a',
-      borderRadius: '8px',
-      color: 'white',
-      fontWeight: 'bold'
-    }
-  },
-  {
-    id: 'leaf-2',
-    type: 'default',
-    data: { label: 'Leaf-2', nodeType: 'leaf' },
-    position: { x: 300, y: 200 },
-    style: { 
-      background: '#4ecdc4', 
-      border: '2px solid #26a69a',
-      borderRadius: '8px',
-      color: 'white',
-      fontWeight: 'bold'
-    }
-  },
-  {
-    id: 'leaf-3',
-    type: 'output',
-    data: { label: 'Leaf-3', nodeType: 'leaf' },
-    position: { x: 500, y: 200 },
-    style: { 
-      background: '#4ecdc4', 
-      border: '2px solid #26a69a',
-      borderRadius: '8px',
-      color: 'white',
-      fontWeight: 'bold'
-    }
-  },
-  {
-    id: 'annotation-1',
-    type: 'annotation',
-    draggable: false,
-    selectable: false,
-    data: {
-      level: 1,
-      label: 'Spine-Leaf Network Topology',
-      arrowStyle: {
-        right: 0,
-        bottom: 0,
-        transform: 'translate(-30px,10px) rotate(-80deg)',
-      },
-    },
-    position: { x: 50, y: -50 },
-  },
-];
-
-const networkEdges = [
-  {
-    id: 'spine1-leaf1',
-    source: 'spine-1',
-    target: 'leaf-1',
-    animated: true,
-    style: { stroke: '#ffd700', strokeWidth: 3 },
-    label: 'EBGP',
-    labelStyle: { fill: '#ffd700', fontWeight: 'bold' },
-  },
-  {
-    id: 'spine1-leaf2',
-    source: 'spine-1',
-    target: 'leaf-2',
-    animated: true,
-    style: { stroke: '#ffd700', strokeWidth: 3 },
-    label: 'EBGP',
-    labelStyle: { fill: '#ffd700', fontWeight: 'bold' },
-  },
-  {
-    id: 'spine1-leaf3',
-    source: 'spine-1',
-    target: 'leaf-3',
-    animated: true,
-    style: { stroke: '#ffd700', strokeWidth: 3 },
-    label: 'EBGP',
-    labelStyle: { fill: '#ffd700', fontWeight: 'bold' },
-  },
-  {
-    id: 'spine2-leaf1',
-    source: 'spine-2',
-    target: 'leaf-1',
-    animated: true,
-    style: { stroke: '#ffd700', strokeWidth: 3 },
-    label: 'EBGP',
-    labelStyle: { fill: '#ffd700', fontWeight: 'bold' },
-  },
-  {
-    id: 'spine2-leaf2',
-    source: 'spine-2',
-    target: 'leaf-2',
-    animated: true,
-    style: { stroke: '#ffd700', strokeWidth: 3 },
-    label: 'EBGP',
-    labelStyle: { fill: '#ffd700', fontWeight: 'bold' },
-  },
-  {
-    id: 'spine2-leaf3',
-    source: 'spine-2',
-    target: 'leaf-3',
-    animated: true,
-    style: { stroke: '#ffd700', strokeWidth: 3 },
-    label: 'EBGP',
-    labelStyle: { fill: '#ffd700', fontWeight: 'bold' },
-  },
-];
-
 function TopologyBuilder() {
   const [yamlConfig, setYamlConfig] = useState(sampleYamlConfig);
   const [isYamlValid, setIsYamlValid] = useState(true);
@@ -281,7 +141,7 @@ function TopologyBuilder() {
     }
   })();
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialTopology.nodes as any);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialTopology.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialTopology.edges);
 
   const onConnect = useCallback(
@@ -299,7 +159,7 @@ function TopologyBuilder() {
       if (isValid) {
         const fabric = parseYamlToFabric(yamlConfig);
         const { nodes: newNodes, edges: newEdges } = fabricToTopology(fabric);
-        setNodes(newNodes as any);
+        setNodes(newNodes);
         setEdges(newEdges);
       }
     } catch (err) {
@@ -311,6 +171,15 @@ function TopologyBuilder() {
   const handleYamlChange = useCallback((newYaml: string) => {
     setYamlConfig(newYaml);
   }, []);
+
+  // Get the fabric name for the title
+  let fabricName = '';
+  try {
+    const fabric = parseYamlToFabric(yamlConfig);
+    fabricName = fabric.metadata?.name || '';
+  } catch {
+    // ignore
+  }
 
   return (
     <Box sx={{ 
@@ -353,6 +222,24 @@ function TopologyBuilder() {
         overflow: 'hidden',
         position: 'relative',
       }}>
+        {/* Topology Title */}
+        <Box sx={{
+          position: 'absolute',
+          top: 18,
+          left: 24,
+          zIndex: 10,
+        }}>
+          <span style={{
+            fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif",
+            fontWeight: 700,
+            fontSize: 20,
+            color: '#e2e8f0',
+            letterSpacing: 0.2,
+            textShadow: '0 2px 8px #23293a',
+          }}>
+            {fabricName ? `${fabricName} Network Topology` : 'Network Topology'}
+          </span>
+        </Box>
         {!isYamlValid && (
           <Box sx={{ 
             position: 'absolute', 
@@ -373,6 +260,7 @@ function TopologyBuilder() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           fitView
+          fitViewOptions={{ padding: 0.2 }}
           attributionPosition="bottom-left"
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
