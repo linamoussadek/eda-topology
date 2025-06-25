@@ -152,9 +152,8 @@ export const edges = [
     type: 'smoothstep',
     animated: true,
     style: {
-      stroke: 'url(#edge-gradient)',
+      stroke: '#6366f1',
       strokeWidth: 3,
-      filter: 'drop-shadow(0 0 8px #8f3fff88)',
     },
   },
   {
@@ -164,9 +163,8 @@ export const edges = [
     animated: true,
     label: 'animated edge',
     style: {
-      stroke: 'url(#edge-gradient)',
+      stroke: '#6366f1',
       strokeWidth: 3,
-      filter: 'drop-shadow(0 0 8px #6366f188)',
     },
   },
   {

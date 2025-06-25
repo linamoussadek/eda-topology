@@ -7,6 +7,7 @@ spec:
   leafs:
     leafNodeSelector:
       - eda.nokia.com/role=leaf
+      - eda.nokia.com/role=leaf
   spines:
     spineNodeSelector:
       - eda.nokia.com/role=spine
@@ -21,4 +22,4 @@ spec:
     bgp:
       asnPool: asn-pool
   overlayProtocol:
-    protocol: EBGP 
+    protocol: EBGP

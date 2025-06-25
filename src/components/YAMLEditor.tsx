@@ -38,7 +38,7 @@ export default function YAMLEditor({ value, onChange, isValid }: YAMLEditorProps
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ p: 2, borderBottom: '1px solid #333', backgroundColor: '#23293a' }}>
+      <Box sx={{ p: 2, borderBottom: '1px solid #333', backgroundColor: '#1d222e' }}>
         <Typography variant="h6" sx={{ color: '#e2e8f0', mb: 1, fontWeight: 600 }}>
           EDA Fabric Configuration
         </Typography>
@@ -88,13 +88,19 @@ export default function YAMLEditor({ value, onChange, isValid }: YAMLEditorProps
         </Box>
         
         {!isValid && (
-          <Alert severity="error" sx={{ backgroundColor: '#1b5e20' }}>
+          <Alert severity="error" sx={{ 
+            backgroundColor: '#d32f2f',
+            color: '#ffffff',
+            '& .MuiAlert-icon': {
+              color: '#ffffff'
+            }
+          }}>
             Invalid YAML format
           </Alert>
         )}
       </Box>
       
-      <Box sx={{ flex: 1, p: 2 }}>
+      <Box sx={{ flex: 1, p: 2, backgroundColor: '#1d222e' }}>
         <TextField
           multiline
           fullWidth
@@ -106,7 +112,7 @@ export default function YAMLEditor({ value, onChange, isValid }: YAMLEditorProps
             '& .MuiOutlinedInput-root': {
               height: '100%',
               color: '#e2e8f0',
-              backgroundColor: '#1a1a1a',
+              backgroundColor: '#1d222e',
               fontFamily: '"Fira Code", "Monaco", "Consolas", monospace',
               fontSize: '13px',
               lineHeight: 1.4,

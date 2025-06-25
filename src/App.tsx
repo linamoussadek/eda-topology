@@ -1,13 +1,11 @@
 import { useCallback, useState, useEffect } from 'react';
 import ReactFlow, {
   addEdge,
-  MiniMap,
   Controls,
   Background,
   useNodesState,
   useEdgesState,
   type Connection,
-  type Node,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -35,8 +33,6 @@ const nodeTypes = {
 const edgeTypes = {
   button: ButtonEdge,
 };
-
-const nodeClassName = (node: Node) => node.type || 'default';
 
 const theme = createTheme({
   palette: {
@@ -76,7 +72,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
+          background: '#23293a',
           borderRadius: 14,
         },
       },
@@ -181,14 +177,14 @@ function TopologyBuilder() {
       height: 'calc(100vh - 120px)', 
       gap: 3,
       p: 3,
-      background: 'linear-gradient(135deg, #20223a 0%, #181a20 100%)',
+      background: '#131723',
     }}>
       {/* Left Panel: YAML Configuration */}
       <Box sx={{ 
         flex: 1,
-        background: '#23293a',
-        border: '1.5px solid #333',
-        boxShadow: '0 2px 16px 0 #23293a44',
+        background: '#1d222e',
+        border: '1.5px solid #23293a',
+        boxShadow: '0 2px 16px 0 #181a2040',
         borderRadius: '18px',
         overflow: 'hidden',
         display: 'flex',
@@ -211,8 +207,8 @@ function TopologyBuilder() {
       {/* Right Panel: Network Topology */}
       <Box sx={{ 
         flex: 2,
-        background: '#23293a',
-        border: '1.5px solid #333',
+        background: '#1d222e',
+        border: '1.5px solid #23293a',
         boxShadow: '0 2px 24px 0 #23293a44',
         borderRadius: '18px',
         overflow: 'hidden',
@@ -257,45 +253,16 @@ function TopologyBuilder() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          fitView
-          fitViewOptions={{ padding: 0.2 }}
-          attributionPosition="bottom-left"
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          defaultEdgeOptions={{
-            style: { stroke: 'url(#edge-gradient)', strokeWidth: 2 },
+          fitView
+          attributionPosition="bottom-left"
+          style={{
+            background: '#1d222e',
           }}
         >
-          <defs>
-            <linearGradient id="edge-gradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#6366f1" />
-              <stop offset="100%" stopColor="#8f3fff" />
-            </linearGradient>
-          </defs>
-          <MiniMap 
-            zoomable 
-            pannable 
-            nodeClassName={nodeClassName}
-            style={{
-              background: 'linear-gradient(135deg, #23293a 0%, #181a20 100%)',
-              border: '1.5px solid #6366f1',
-              borderRadius: 12,
-            }}
-          />
-          <Controls 
-            style={{
-              background: 'rgba(79,70,229,0.85)',
-              border: '1.5px solid #8f3fff',
-              borderRadius: 12,
-              color: '#e2e8f0',
-            }}
-          />
-          <Background 
-            color="#23293a" 
-            gap={22}
-            size={1.5}
-            variant="dots"
-          />
+          <Controls />
+          <Background color="#666" gap={16} />
         </ReactFlow>
       </Box>
     </Box>
