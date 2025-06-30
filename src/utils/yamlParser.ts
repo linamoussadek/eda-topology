@@ -1,4 +1,5 @@
 import * as yaml from 'js-yaml';
+import type { TopologyNodeData } from '../types/types';
 
 export interface EDAFabric {
   apiVersion: string;
@@ -33,13 +34,8 @@ export interface EDAFabric {
 
 export interface TopologyNode {
   id: string;
-  type: string;
-  data: {
-    label: string;
-    nodeType: string;
-    model: string;
-    ports: { port: number; type: string }[];
-  };
+  type: 'custom';
+  data: TopologyNodeData;
   position: { x: number; y: number };
   style?: React.CSSProperties;
 }
@@ -70,19 +66,18 @@ export function fabricToTopology(fabric: EDAFabric): {
   const nodes: TopologyNode[] = [];
   const edges: TopologyEdge[] = [];
   
-  // Extract node counts from selectors (simplified parsing)
-  // In a real implementation, you would query actual nodes based on selectors
+  // extract node counts from selectors
   const spineCount = Math.max(1, fabric.spec.spines.spineNodeSelector.length || 2);
   const leafCount = Math.max(1, fabric.spec.leafs.leafNodeSelector.length || 3);
   
-  // Calculate dynamic positioning based on node counts
+  // calculate dynamic positioning based on node counts
   const spineSpacing = Math.max(200, 800 / spineCount);
   const leafSpacing = Math.max(200, 600 / leafCount);
   const startX = 100;
   const spineY = 50;
   const leafY = 250;
   
-  // Create spine nodes
+  // create spine nodes
   for (let i = 1; i <= spineCount; i++) {
     nodes.push({
       id: `spine-${i}`,
@@ -106,7 +101,7 @@ export function fabricToTopology(fabric: EDAFabric): {
     });
   }
   
-  // Create leaf nodes
+  // create leaf nodes
   for (let i = 1; i <= leafCount; i++) {
     nodes.push({
       id: `leaf-${i}`,
@@ -130,7 +125,7 @@ export function fabricToTopology(fabric: EDAFabric): {
     });
   }
   
-  // Create edges between spines and leaves
+  // create edges between spines and leaves
   const protocol = fabric.spec.underlayProtocol.protocol.join(', ');
   const edgeColor = protocol.includes('EBGP') ? '#ffd700' : 
                    protocol.includes('OSPF') ? '#ff6b6b' : 
@@ -185,7 +180,7 @@ export function validateYaml(yamlString: string): boolean {
   return isYamlValid;
 }
 
-// Helper function to generate sample YAML with different configurations
+// helper function to generate sample YAML with different configurations
 export function generateSampleYaml(config: {
   spineCount?: number;
   leafCount?: number;
@@ -228,19 +223,18 @@ ${spineSelectors.map(selector => `      - ${selector}`).join('\n')}
     protocol: ${protocol}`;
 }
 
-// Load YAML file from public directory
+// load YAML file from public directory
 export const loadYamlFile = async (filename: string): Promise<EDAFabric> => {
   try {
-    const response = await fetch(`/${filename}`);
+    const response = await fetch(`/public/${filename}`);
     const yamlText = await response.text();
     return parseYamlToFabric(yamlText);
   } catch (error) {
-    console.error('Error loading YAML file:', error);
-    throw new Error(`Failed to load ${filename}`);
+    throw new Error(`Failed to load YAML file: ${error}`);
   }
 };
 
-// Export selector-based EDA YAML format
+// export selector-based EDA YAML format
 export const topologyToFabric = (_nodes: TopologyNode[], _edges: TopologyEdge[], fabricName: string = 'myfabric-1'): EDAFabric => {
   return {
     apiVersion: 'fabrics.eda.nokia.com/v1alpha1',
@@ -274,7 +268,7 @@ export const topologyToFabric = (_nodes: TopologyNode[], _edges: TopologyEdge[],
   };
 };
 
-// Export topology as YAML string
+// export topology as YAML string
 export const exportTopologyToYaml = (nodes: TopologyNode[], edges: TopologyEdge[], fabricName: string = 'myfabric-1'): string => {
   const fabric = topologyToFabric(nodes, edges, fabricName);
   return yaml.dump(fabric);

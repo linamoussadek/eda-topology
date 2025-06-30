@@ -44,19 +44,20 @@ export interface EDAFabric {
   };
 }
 
+// Node data interface
+export interface TopologyNodeData {
+  label: string;
+  nodeType: 'leaf' | 'spine';
+  model: string;
+  ports: { port: number; type: string }[];
+}
+
 // React Flow Node Types
-export type TopologyNode = Node & {
-  type: 'leaf' | 'spine';
-  data: {
-    label: string;
-    nodeType: 'leaf' | 'spine';
-    role: string;
-  };
-};
+export type TopologyNode = Node<TopologyNodeData, 'custom'>;
 
 // React Flow Edge Types
 export type TopologyEdge = Edge & {
-  type: 'default';
+  type?: string;
   data?: {
     label?: string;
   };
@@ -66,27 +67,27 @@ export type TopologyEdge = Edge & {
 export const sampleNodes: TopologyNode[] = [
   {
     id: 'leaf-1',
-    type: 'leaf',
+    type: 'custom',
     position: { x: 100, y: 200 },
-    data: { label: 'Leaf-1', nodeType: 'leaf', role: 'leaf' }
+    data: { label: 'Leaf-1', nodeType: 'leaf', model: '', ports: [] }
   },
   {
     id: 'leaf-2',
-    type: 'leaf',
+    type: 'custom',
     position: { x: 300, y: 200 },
-    data: { label: 'Leaf-2', nodeType: 'leaf', role: 'leaf' }
+    data: { label: 'Leaf-2', nodeType: 'leaf', model: '', ports: [] }
   },
   {
     id: 'spine-1',
-    type: 'spine',
+    type: 'custom',
     position: { x: 200, y: 50 },
-    data: { label: 'Spine-1', nodeType: 'spine', role: 'spine' }
+    data: { label: 'Spine-1', nodeType: 'spine', model: '', ports: [] }
   },
   {
     id: 'spine-2',
-    type: 'spine',
+    type: 'custom',
     position: { x: 200, y: 350 },
-    data: { label: 'Spine-2', nodeType: 'spine', role: 'spine' }
+    data: { label: 'Spine-2', nodeType: 'spine', model: '', ports: [] }
   }
 ];
 

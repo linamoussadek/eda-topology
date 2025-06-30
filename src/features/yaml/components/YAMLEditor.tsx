@@ -46,7 +46,7 @@ export default function YAMLEditor({ value, onChange, isValid }: YAMLEditorProps
           Edit the YAML configuration to modify the network topology
         </Typography>
         
-        {/* Quick Configuration Buttons */}
+        {/* Quick config buttons */}
         <Box sx={{ mb: 2 }}>
           <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block', mb: 1 }}>
             Quick Configurations:

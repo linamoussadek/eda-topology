@@ -13,7 +13,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { type TopologyNode, type TopologyEdge } from '../types';
+import { type TopologyNode, type TopologyEdge } from '../../../types/types';
 
 interface TopologyControlsProps {
   onImportYaml: () => void;

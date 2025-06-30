@@ -31,7 +31,7 @@ const DashboardSidebar: React.FC = () => (
       gap: 1.5,
     }}
   >
-    {icons.map((item, idx) => (
+    {icons.map((item, _) => (
       <Tooltip title={item.label} placement="right" key={item.label}>
         <IconButton
           sx={{

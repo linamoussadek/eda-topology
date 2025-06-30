@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import PortBadge from './PortBadge';
+import type { PortType } from './PortBadge';
 
 const legend = [
-  { port: 1, type: 'inter-switch', label: 'inter-switch link' },
-  { port: 3, type: 'access', label: 'edge link (access)' },
-  { port: 10, type: 'lag', label: 'LAG' },
-  { port: 12, type: 'multi-homed-lag', label: 'Multi-homed LAG' },
+  { port: 1, type: 'inter-switch' as PortType, label: 'inter-switch link' },
+  { port: 3, type: 'access' as PortType, label: 'edge link (access)' },
+  { port: 10, type: 'lag' as PortType, label: 'LAG' },
+  { port: 12, type: 'multi-homed-lag' as PortType, label: 'Multi-homed LAG' },
 ];
 
 const LegendPanel: React.FC = () => (
@@ -30,7 +31,7 @@ const LegendPanel: React.FC = () => (
   >
     {legend.map((item) => (
       <Box key={item.label} sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-        <PortBadge port={item.port} type={item.type as any} />
+        <PortBadge port={item.port} type={item.type} />
         <Typography variant="body2" sx={{ color: '#e2e8f0', ml: 1, fontSize: 15, fontWeight: 400 }}>
           {item.label}
         </Typography>

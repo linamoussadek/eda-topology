@@ -12,7 +12,7 @@ import {
   Settings,
   NetworkCheck,
 } from '@mui/icons-material';
-import { type EDAFabric } from '../types';
+import { type EDAFabric } from '../../../types/types';
 
 interface TopologyInfoProps {
   fabric: EDAFabric | null;

@@ -1,28 +1,23 @@
 import { useCallback, useState, useEffect } from 'react';
-import ReactFlow, {
+import {
   addEdge,
-  Controls,
-  Background,
   useNodesState,
   useEdgesState,
   type Connection,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import { Box, Alert } from '@mui/material';
 import { parseYamlToFabric, fabricToTopology, validateYaml } from '../../../utils/yamlParser';
-import { nodeTypes, edgeTypes } from '../config/nodeTypes';
+import type { TopologyNodeData } from '../../../types/types';
 
 export default function TopologyBuilder() {
   const [yamlConfig, setYamlConfig] = useState('');
   const [isYamlValid, setIsYamlValid] = useState(true);
 
-  // Simple YAML change handler - no server calls
   const handleYamlChange = useCallback((newYaml: string) => {
     setYamlConfig(newYaml);
   }, []);
 
-  // Initialize topology from YAML
   const initialTopology = (() => {
     try {
       const fabric = parseYamlToFabric(yamlConfig);
@@ -32,7 +27,7 @@ export default function TopologyBuilder() {
     }
   })();
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialTopology.nodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState<TopologyNodeData>(initialTopology.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialTopology.edges);
 
   const onConnect = useCallback(
@@ -40,7 +35,6 @@ export default function TopologyBuilder() {
     [setEdges],
   );
 
-  // Reactive YAML to topology conversion
   useEffect(() => {
     try {
       const isValid = validateYaml(yamlConfig);
@@ -57,7 +51,6 @@ export default function TopologyBuilder() {
     }
   }, [yamlConfig, setNodes, setEdges]);
 
-  // Get the fabric name for the title
   let fabricName = '';
   try {
     const fabric = parseYamlToFabric(yamlConfig);

@@ -2,17 +2,22 @@ import ReactFlow, {
   Controls,
   Background,
   type Connection,
+  type OnNodesChange,
+  type OnEdgesChange,
+  type Node,
+  type Edge,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import { Box } from '@mui/material';
 import { nodeTypes, edgeTypes } from '../config/nodeTypes';
+import type { TopologyNodeData } from '../../../types/types';
 
 interface TopologyViewProps {
-  nodes: any[];
-  edges: any[];
-  onNodesChange: any;
-  onEdgesChange: any;
+  nodes: Node<TopologyNodeData>[];
+  edges: Edge[];
+  onNodesChange: OnNodesChange;
+  onEdgesChange: OnEdgesChange;
   onConnect: (params: Connection) => void;
   fabricName: string;
 }
