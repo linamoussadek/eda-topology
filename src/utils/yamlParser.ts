@@ -161,19 +161,28 @@ export function fabricToTopology(fabric: EDAFabric): {
 }
 
 export function validateYaml(yamlString: string): boolean {
+  let fabric: EDAFabric;
   try {
-    const fabric = parseYamlToFabric(yamlString);
-    return !!(
-      fabric.apiVersion &&
-      fabric.kind === 'Fabric' &&
-      fabric.metadata?.name &&
-      fabric.spec?.leafs &&
-      fabric.spec?.spines &&
-      fabric.spec?.underlayProtocol
-    );
+    fabric = parseYamlToFabric(yamlString);
   } catch {
     return false;
   }
+
+  const hasApiVersion = fabric.apiVersion !== undefined && fabric.apiVersion !== '';
+  const hasCorrectKind = fabric.kind === 'Fabric';
+  const hasMetadataName = Boolean(fabric.metadata && fabric.metadata.name && fabric.metadata.name !== '');
+  const hasLeafs = Boolean(fabric.spec && fabric.spec.leafs);
+  const hasSpines = Boolean(fabric.spec && fabric.spec.spines);
+  const hasUnderlayProtocol = Boolean(fabric.spec && fabric.spec.underlayProtocol);
+
+  const isYamlValid = hasApiVersion && 
+                     hasCorrectKind && 
+                     hasMetadataName && 
+                     hasLeafs && 
+                     hasSpines && 
+                     hasUnderlayProtocol;
+
+  return isYamlValid;
 }
 
 // Helper function to generate sample YAML with different configurations
